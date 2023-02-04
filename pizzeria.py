@@ -37,54 +37,49 @@ class Pizzeria:
         self.report = {}
 
     async def run(self):
-        try:
-            start = perf_counter()
-            tasks = []
-            self.dough_queue = asyncio.Queue(maxsize=50)
-            self.topping_queue = asyncio.Queue(maxsize=50)
-            self.oven_queue = asyncio.Queue(maxsize=50)
-            self.waiter_queue = asyncio.Queue(maxsize=50)
+        start = perf_counter()
+        tasks = []
+        self.dough_queue = asyncio.Queue(maxsize=50)
+        self.topping_queue = asyncio.Queue(maxsize=50)
+        self.oven_queue = asyncio.Queue(maxsize=50)
+        self.waiter_queue = asyncio.Queue(maxsize=50)
 
-            with open("pizza_orders.json", "r") as f:
-                task_data = json.load(f)
-            for count, order_data in enumerate(task_data["Pizzas"]):
-                order = Order(count, order_data)
-                self.orders.append(order)
-                await self.dough_queue.put(order)
+        with open("pizza_orders.json", "r") as f:
+            task_data = json.load(f)
+        for count, order_data in enumerate(task_data["Pizzas"]):
+            order = Order(count, order_data)
+            self.orders.append(order)
+            await self.dough_queue.put(order)
 
-            [tasks.append(asyncio.create_task(self.dough_chef(i))) for i in range(self.douch_chefs)]
-            # for i in range(self.douch_chefs):
-            #     tasks.append(
-            #         asyncio.create_task(self.dough_chef(i))
-            #     )
-            for i in range(self.topping_chefs):
-                tasks.append(
-                    asyncio.create_task(self.topping_chef(i))
-                )
-            for i in range(self.ovens):
-                tasks.append(
-                    asyncio.create_task(self.oven(i))
-                )
-            for i in range(self.waiters):
-                tasks.append(
-                    asyncio.create_task(self.waiter(i))
-                )
+        [tasks.append(asyncio.create_task(self.dough_chef(i))) for i in range(self.douch_chefs)]
+        # for i in range(self.douch_chefs):
+        #     tasks.append(
+        #         asyncio.create_task(self.dough_chef(i))
+        #     )
+        for i in range(self.topping_chefs):
+            tasks.append(
+                asyncio.create_task(self.topping_chef(i))
+            )
+        for i in range(self.ovens):
+            tasks.append(
+                asyncio.create_task(self.oven(i))
+            )
+        for i in range(self.waiters):
+            tasks.append(
+                asyncio.create_task(self.waiter(i))
+            )
 
-            await self.dough_queue.join()
-            await self.topping_queue.join()
-            await self.oven_queue.join()
-            await self.waiter_queue.join()
+        await self.dough_queue.join()
+        await self.topping_queue.join()
+        await self.oven_queue.join()
+        await self.waiter_queue.join()
 
-            for task in tasks:
-                task.cancel()
+        for task in tasks:
+            task.cancel()
 
-            end = perf_counter()
-            self.generate_report(start, end)
-            self.report["TotalTime"] = end - start
-            x = 1
-
-        except Exception:
-            logger.warning(f"Encountered error:", exc_info=True)
+        end = perf_counter()
+        self.generate_report(start, end)
+        self.report["TotalTime"] = end - start
 
     def generate_report(self, start: float, end: float):
         total_time = 0
@@ -202,5 +197,5 @@ def run():
     try:
         pizzeria = Pizzeria()
         asyncio.run(pizzeria.run())
-    except:
-        print("Problem found!!")
+    except Exception:
+        logger.warning(f"Encountered error:", exc_info=True)
