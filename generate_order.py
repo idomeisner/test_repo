@@ -1,22 +1,29 @@
 from random import sample, randint
 import json
 
+
 TOPPING = [
-    "Green olives",
+    "Anchovy",
     "Black olives",
-    "Tomato",
+    "Extra cheese",
+    "Fresh basil",
+    "Fresh garlic",
+    "Green olives",
+    "Green pepper",
     "Mushroom",
     "Onion",
-    "Extra cheese",
-    "Green pepper",
-    "Fresh garlic",
-    "Fresh basil",
-    "Pepperoni",
-    "Anchovy"
+    "Pepperoni"
+    "Tomato"
 ]
 
 
-def generate_order():
+def generate_order() -> None:
+    """
+    Generates a random pizza order file
+
+    :return:
+    """
+
     res = []
     num_of_orders = randint(5, 20)
 

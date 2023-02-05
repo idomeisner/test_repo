@@ -3,7 +3,7 @@ import generate_order
 import pizzeria
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
     parser.add_argument("-g", "--generate-order", dest="generate", action="store_true", help="generate new order file")

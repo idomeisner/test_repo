@@ -1,7 +1,7 @@
 import asyncio
 from abc import ABC, abstractmethod
-from time import perf_counter
 from config import config, logger
+from time import perf_counter
 from typing import List, Optional
 
 
