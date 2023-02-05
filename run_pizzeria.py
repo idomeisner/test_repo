@@ -4,11 +4,6 @@ import pizzeria
 
 
 def main():
-    import yaml
-    def read_yaml(file_path):
-        with open(file_path, "r") as f:
-            return yaml.safe_load(f)
-    config = read_yaml("config.yml")
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
     parser.add_argument("-g", "--generate-order", dest="generate", action="store_true", help="generate new order file")

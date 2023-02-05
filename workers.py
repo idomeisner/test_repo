@@ -116,8 +116,6 @@ class Waiter(Worker):
             try:
                 # grab an item from the queue (if there is one)
                 order_data = await self.in_queue.get()
-
-                # read the data we need to perform the work
                 order_id = order_data.order_id
 
                 # do some work that takes some time - simulated here with an async sleep
@@ -126,9 +124,7 @@ class Waiter(Worker):
                 end = perf_counter()
                 logger.info(f"Waiter #{self._id} finished serving pizza #{order_id}, time = {end}")
                 order_data.end_time = end
-                # self.report[f"{order_id}"] = order_data.end_time - order_data.start_time
 
-                # await self.out_queue.put(order_data)
                 self.in_queue.task_done()
 
             except Exception:

@@ -1,6 +1,6 @@
 import asyncio
 from time import perf_counter
-from typing import List, Dict
+from typing import List, Dict, Any
 import json
 from config import config, logger
 from workers import DouchChef, ToppingChef, Oven, Waiter
@@ -27,7 +27,6 @@ class Pizzeria:
         self.ovens = config["OVENS"]
         self.waiters = config["WAITERS"]
         self.orders: List[Order] = []
-        self.report = {}
 
     async def run(self):
         start = perf_counter()
@@ -71,23 +70,37 @@ class Pizzeria:
             task.cancel()
 
         end = perf_counter()
-        self.generate_report(start, end)
-        self.report["TotalTime"] = end - start
+        self.generate_report(end - start)
 
-    def generate_report(self, start: float, end: float):
-        total_time = 0
-        logger.info(f"Total time: {int(end - start)}sec")
+    def generate_report(self, total_time: float):
+        report: Dict[str, Any] = {}
+        report["Orders"] = {}
+        all_orders = 0
+
+        logger.info(f"\nREPORT:")
+        logger.info(f"Total time: {int(total_time)}sec")
         logger.info("Preparation time for each order:")
+
         for order in self.orders:
             order_time = order.end_time - order.start_time
-            total_time += order_time
-            logger.info(f"Order {order.order_id + 1} took: {int(order_time)}sec")
-        logger.info(f"Average order time: {int(total_time / len(self.orders))}sec")
+            order_key = f"Order {order.order_id + 1}"
+            report["Orders"][order_key] = {"Start Time": order.start_time, "End Time": order.end_time, "Total Time": order_time}
+            all_orders += order_time
+            logger.info(f"Order {order.order_id + 1}: {int(order_time)}sec")
+
+        average_time = int(all_orders / len(self.orders)) if len(self.orders) else 0
+        logger.info(f"Average order time: {average_time}sec")
+
+        report["TotalTime"] = int(total_time)
+        report["AverageTime"] = average_time
+
+        with open("report.json", "w") as f:
+            json.dump(report, fp=f, indent=4)
 
 
 def run():
     try:
-        pizzeria = Pizzeria()
-        asyncio.run(pizzeria.run())
+        asyncio.run(Pizzeria().run())
+
     except Exception:
         logger.warning(f"Encountered error:", exc_info=True)

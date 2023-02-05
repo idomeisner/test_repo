@@ -1,0 +1,16 @@
+{
+    "Orders": {
+        "Order 1": {
+            "Start Time": 0.1654077,
+            "End Time": 36.1734088,
+            "Total Time": 36.008001099999994
+        },
+        "Order 2": {
+            "Start Time": 0.1656627,
+            "End Time": 26.1719297,
+            "Total Time": 26.006267
+        }
+    },
+    "TotalTime": 36,
+    "AverageTime": 31
+}
