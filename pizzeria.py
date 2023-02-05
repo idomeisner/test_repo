@@ -2,7 +2,7 @@ import asyncio
 from time import perf_counter
 from typing import List, Dict
 import json
-from logger_config import logger
+from config import config, logger
 from workers import DouchChef, ToppingChef, Oven, Waiter
 
 
@@ -22,10 +22,10 @@ class Pizzeria:
     waiter_queue: asyncio.Queue
 
     def __init__(self):
-        self.douch_chefs = 2
-        self.topping_chefs = 3
-        self.ovens = 1
-        self.waiters = 2
+        self.douch_chefs = config["DOUCH_CHEFS"]
+        self.topping_chefs = config["TOPPING_CHEFS"]
+        self.ovens = config["OVENS"]
+        self.waiters = config["WAITERS"]
         self.orders: List[Order] = []
         self.report = {}
 
@@ -33,10 +33,10 @@ class Pizzeria:
         start = perf_counter()
         tasks = []
 
-        self.dough_queue = asyncio.Queue(maxsize=50)
-        self.topping_queue = asyncio.Queue(maxsize=50)
-        self.oven_queue = asyncio.Queue(maxsize=50)
-        self.waiter_queue = asyncio.Queue(maxsize=50)
+        self.dough_queue = asyncio.Queue()
+        self.topping_queue = asyncio.Queue()
+        self.oven_queue = asyncio.Queue()
+        self.waiter_queue = asyncio.Queue()
 
         with open("pizza_orders.json", "r") as f:
             task_data = json.load(f)
