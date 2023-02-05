@@ -12,6 +12,9 @@ WAITER_WORK_TIME: int = config["WAITER_WORK_TIME"]
 
 
 class Worker(ABC):
+    """
+    Base class of each of the workers types
+    """
     def __init__(self, idx: int, in_queue: asyncio.Queue, out_queue: Optional[asyncio.Queue] = None):
         self._id = idx
         self.in_queue = in_queue

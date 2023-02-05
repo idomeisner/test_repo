@@ -1,14 +1,14 @@
 {
     "Orders": {
         "Order 1": {
-            "Start Time": 0.1640449,
-            "End Time": 36.1700218,
-            "Total Time": 36.0059769
+            "Start Time": 0.2848734,
+            "End Time": 36.3058048,
+            "Total Time": 36.020931399999995
         },
         "Order 2": {
-            "Start Time": 0.1642575,
-            "End Time": 26.1670678,
-            "Total Time": 26.0028103
+            "Start Time": 0.2854737,
+            "End Time": 26.3080795,
+            "Total Time": 26.0226058
         }
     },
     "TotalTime": 36,
